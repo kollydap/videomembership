@@ -22,14 +22,37 @@ def homepage(request: Request):
 
 
 @api_router.get(path="/login", response_class=HTMLResponse)
-def user_sgnup_get_view(request: Request):
+def user_login_get_view(request: Request):
     return templates.TemplateResponse(
         name="/auth/login.html", context={"request": request}
     )
 
 
-# @api_router.post(path="/login", response_class=HTMLResponse)
-# def login_post_view(
-#     request: Request, email: str = Form(...), password: str = Form(...)
-# ):
-#     return templates.TemplateResponse(name="/auth/login.html")
+@api_router.post(path="/login", response_class=HTMLResponse)
+def login_post_view(
+    request: Request, email: str = Form(...), password: str = Form(...)
+):
+    print(password)
+    return templates.TemplateResponse(
+        name="/auth/login.html", context={"request": request}
+    )
+
+
+@api_router.get(path="/signup", response_class=HTMLResponse)
+def user_signup_get_view(request: Request):
+    return templates.TemplateResponse(
+        name="/auth/signup.html", context={"request": request}
+    )
+
+
+@api_router.post(path="/signup", response_class=HTMLResponse)
+def signup_post_view(
+    request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    password_confirm: str = Form(...),
+):
+    print(password)
+    return templates.TemplateResponse(
+        name="/auth/signup.html", context={"request": request}
+    )

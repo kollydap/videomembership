@@ -2,6 +2,7 @@ from cassandra.cqlengine.models import Model
 from cassandra.cqlengine import columns
 import uuid
 from . import utils
+from pydantic import BaseModel, EmailStr, SecretStr, validator
 
 
 class User(Model):
@@ -42,3 +43,25 @@ class User(Model):
         obj.set_password(password)
         obj.save()
         return obj
+
+
+class UserLoginModel(BaseModel):
+    email: EmailStr
+    password: SecretStr
+    password_confirm: SecretStr
+
+    @validator("email")
+    def email_validator(cls, v, values, **kwargs):
+        q = User.objects.filter(email=v)
+        if q.count() != 0:
+            raise ValueError("Email is not available")
+        return v
+
+    @validator("password_confirm")
+    def password_match(cls, v, values, **kwargs):
+        password = values.get("password")
+        password_confirm = v
+
+        if password != password_confirm:
+            raise ValueError("Password do not match!")
+        return v

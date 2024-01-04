@@ -5,6 +5,7 @@ from . import utils
 from pydantic import BaseModel, EmailStr, SecretStr, validator
 
 
+
 class User(Model):
     __keyspace__ = "video_membership_app"
     email = columns.Text(primary_key=True)

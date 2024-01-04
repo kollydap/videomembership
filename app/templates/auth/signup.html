@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
   <h1>Signup</h1>
+  {% if errors %}
+    {% for error in errors %}
+      <li>
+        <b>{{ error.loc[0] }}</b>: <b>{{ error.msg }}</b>
+      </li>
+    {% endfor %}
+  {% endif %}
+
+  {{ data }}
   <form method="POST" action="">
     <div>
       <label for="email">Email</label>
@@ -11,10 +20,10 @@
       <input type="password" name="password" placeholder="" />
     </div>
     <div>
-        <label for="password">Password COnfirm</label>
-        <input type="password" name="password_confirm" placeholder="" />
-      </div>
-    
+      <label for="password">Password COnfirm</label>
+      <input type="password" name="password_confirm" placeholder="" />
+    </div>
+
     <button type="submit">SIgnup</button>
   </form>
 {% endblock %}

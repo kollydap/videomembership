@@ -1,8 +1,11 @@
 from fastapi import APIRouter, status, Body, Depends, Request, Form
 from fastapi.responses import HTMLResponse
+import app.users.utils as user_utils
+from pydantic import ValidationError
+from app.users.models import UserSignupSchema, UserLoginSchema
 
 # from app.core.application import TEMPLATE_DIR
-import pathlib
+import pathlib, json
 
 from fastapi.templating import Jinja2Templates
 
@@ -32,9 +35,16 @@ def user_login_get_view(request: Request):
 def login_post_view(
     request: Request, email: str = Form(...), password: str = Form(...)
 ):
-    print(password)
+    raw_Data = {
+        "email": email,
+        "password": password,
+    }
+    data, errors = user_utils.valid_schema_data_or_error(
+        raw_data=raw_Data, SchemaModel=UserLoginSchema
+    )
     return templates.TemplateResponse(
-        name="/auth/login.html", context={"request": request}
+        name="/auth/login.html",
+        context={"request": request, "data": data, "errors": errors},
     )
 
 
@@ -47,12 +57,21 @@ def user_signup_get_view(request: Request):
 
 @api_router.post(path="/signup", response_class=HTMLResponse)
 def signup_post_view(
+    # if it waas Api we could set the model here
     request: Request,
     email: str = Form(...),
     password: str = Form(...),
     password_confirm: str = Form(...),
 ):
-    print(password)
+    raw_Data = {
+        "email": email,
+        "password": password,
+        "password_confirm": password_confirm,
+    }
+    data, errors = user_utils.valid_schema_data_or_error(
+        raw_data=raw_Data, SchemaModel=UserSignupSchema
+    )
     return templates.TemplateResponse(
-        name="/auth/signup.html", context={"request": request}
+        name="/auth/signup.html",
+        context={"request": request, "data": data, "errors": errors},
     )

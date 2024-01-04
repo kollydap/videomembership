@@ -45,7 +45,7 @@ class User(Model):
         return obj
 
 
-class UserLoginModel(BaseModel):
+class UserSignupSchema(BaseModel):
     email: EmailStr
     password: SecretStr
     password_confirm: SecretStr
@@ -65,3 +65,8 @@ class UserLoginModel(BaseModel):
         if password != password_confirm:
             raise ValueError("Password do not match!")
         return v
+
+
+class UserLoginSchema(BaseModel):
+    email: EmailStr
+    password: SecretStr

@@ -1,6 +1,28 @@
 from email_validator import EmailNotValidError, validate_email
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
+import json
+from pydantic import BaseModel, error_wrappers, ValidationError
+
+
+def valid_schema_data_or_error(raw_data: dict, SchemaModel: BaseModel):
+    data = {}
+    errors = []
+    error_str = ""
+
+    try:
+        # insted we validate incoming data against our PYDANTIC Signup model
+        cleaned_data = SchemaModel(**raw_data)
+
+        data = cleaned_data.dict()
+    except error_wrappers.ValidationError as e:
+        error_str = e.json()
+    if error_str is not None:
+        try:
+            errors = json.loads(error_str)
+        except Exception as e:
+            errors = [{"loc": "non field error", "msg": "unknown error"}]
+    return data, errors
 
 
 def _validate_email(email):

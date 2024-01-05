@@ -8,6 +8,7 @@ os.environ["CQLENG_ALLOW_SCHEMA_MANAGEMENT"] = "1"
 
 class Settings(BaseSettings):
     keyspace: str = Field(..., env="ASTRADB_KEYSPACE")
+    secret_key: str = Field(..., env='SECRET_KEY')
 
     class Config:
         env_file = ".env"

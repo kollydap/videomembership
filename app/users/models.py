@@ -19,12 +19,14 @@ class User(Model):
         return f"User(email={self.email},user_id={self.user_id})"
 
     def set_password(self, password_str: str, commit=False):
+        # when a user sets password we hash it
         hashed_password = utils.generate_hash(password_str=password_str)
         self.password = hashed_password
         if commit:
             self.save()
         return True
 
+    #* called during login 
     def verify_password(self, password_str: str):
         hashed_password = self.password
         verified, _ = utils.verify_hashed_password(

@@ -3,16 +3,13 @@ from fastapi.responses import HTMLResponse
 import app.users.utils as user_utils
 from pydantic import ValidationError
 from app.users.models import UserSignupSchema, UserLoginSchema
-
-# from app.core.application import TEMPLATE_DIR
 import pathlib, json
-
 from fastapi.templating import Jinja2Templates
 
-BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
-print(BASE_DIR)
 
+BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 TEMPLATE_DIR = BASE_DIR / "templates"
+
 templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
 
 api_router = APIRouter()
